@@ -6,16 +6,17 @@ CActorBullet::CActorBullet(GLint* _program, GLuint* _VAO, int _indiceCount, CCam
 	objPosition = gameActor->objPosition;
 	actorVelocity = vec3(0.0f, 0.0f, 0.0f);
 	previousActorVelocity = vec3(0.0f, 0.0f, 0.0f);
+	objScaleAmount = 0.3f;
 }
 
 CActorBullet::~CActorBullet()
 {
 }
 
-void CActorBullet::BulletUpdate(float mouseX, float mouseY)
+void CActorBullet::BulletUpdate(float mouseX, float mouseZ)
 {
 	vec3 actorDesiredVelocity;
-	vec3 actorDesiredPoisiton = vec3(mouseX, 1.0f, mouseY) - objPosition;
+	vec3 actorDesiredPoisiton = vec3(mouseX, 1.0f, mouseZ) - objPosition;
 
 	actorDesiredVelocity = (glm::normalize(actorDesiredPoisiton) * maxSpeed);
 	vec3 actorSteering;

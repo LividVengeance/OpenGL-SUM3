@@ -8,7 +8,7 @@ public:
 	CActorBullet(GLint* _program, GLuint* _VAO, int _indiceCount, CCamera* _gameCamera, GLuint* _texture, CObject* gameActor);
 	~CActorBullet();
 
-	void BulletUpdate(float mouseX, float mouseY);
+	void BulletUpdate(float mouseX, float mouseZ);
 
 	vec3 previousActorVelocity;
 	vec3 actorVelocity;

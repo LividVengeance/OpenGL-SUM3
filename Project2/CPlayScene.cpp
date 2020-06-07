@@ -1,9 +1,10 @@
 #include "CPlayScene.h"
 
-CPlayScene::CPlayScene(CCamera* _gameCamera, CInput* _gameInput)
+CPlayScene::CPlayScene(CCamera* _gameCamera, CInput* _gameInput, FMOD::System* _audioSystem)
 {
 	gameCamera = _gameCamera;
 	gameInput = _gameInput;
+	audioSystem = _audioSystem;
 
 	skyboxProgram = CShaderLoader::CreateProgram("Resources/Shaders/skybox.vs",
 		"Resources/Shaders/skybox.fs");
@@ -22,7 +23,7 @@ CPlayScene::CPlayScene(CCamera* _gameCamera, CInput* _gameInput)
 	actorEnemy = new CActorEnemy(&program, actorEnemyPyramid->GetVAO(), actorEnemyPyramid->GetIndiceCount(), gameCamera, &actorTex);
 
 	actorSphere = new CSphere();
-	gameActor = new CActor(&program, actorSphere->GetVAO(), actorSphere->GetIndiceCount(), gameCamera, &actorTex);
+	gameActor = new CActor(&program, actorSphere->GetVAO(), actorSphere->GetIndiceCount(), gameCamera, &actorTex, audioSystem);
 
 	// Labels
 	actorHealthLabel = new CTextLabel("Health: ", "Resources/Fonts/arial.ttf", glm::vec2(10.0f, 560.0f), glm::vec3(1.0f, 0.0f, 0.0f), 0.5f);

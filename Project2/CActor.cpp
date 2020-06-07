@@ -1,8 +1,12 @@
 #include "CActor.h"
 
-CActor::CActor(GLint* _program, GLuint* _VAO, int _indiceCount, CCamera* _gameCamera, GLuint* _texture)
+CActor::CActor(GLint* _program, GLuint* _VAO, int _indiceCount, CCamera* _gameCamera, GLuint* _texture, FMOD::System* _audioSystem)
 	: CObject(_program, _VAO, _indiceCount, _gameCamera, _texture)
 {
+	audioSystem = _audioSystem;
+
+	shootTrack = new CAudio("Resources/Audio/Thump.wav", audioSystem, false);
+
 	program = CShaderLoader::CreateProgram("Resources/Shaders/Basic-Normal.vs",
 		"Resources/Shaders/Blinn-Phong.fs");
 	
@@ -39,24 +43,26 @@ void CActor::MoveInput(GLfloat deltaTime, CInput* gameInput)
 
 void CActor::ShootInput(GLfloat deltaTime, CInput* gameInput)
 {
-	float offSetX = Utils::SCR_WIDTH / 2;
-	float offSetY = Utils::SCR_HEIGHT / 2;
+	float offSetX = Utils::SCR_WIDTH/2;
+	float offSetZ = Utils::SCR_HEIGHT/2;
 
 	float mouseX = gameInput->getMouseX();
-	float mouseY = gameInput->getMouseY();
+	float mouseZ = gameInput->getMouseY();
 
 	float mouseXFit = -(offSetX - mouseX);
-	float mouseYFit = -(offSetY - mouseY);
+	float mouseZFit = -(offSetZ - mouseZ);
 	
 	if (gameInput->getClick(0))
 	{
 		vec2 mousePos
 		{
-			mouseXFit, mouseYFit,
+			mouseXFit, mouseZFit,
 		};
 	
 		newBullet = new CActorBullet(&program, actorSphere->GetVAO(), actorSphere->GetIndiceCount(), gameCamera, &texture, this);
 		bulletsInScene.insert(std::make_pair(newBullet, mousePos));
+
+		shootTrack->PlaySound();
 
 		newBullet->BulletUpdate(mousePos.x, mousePos.y);
 		std::cout << "Bullet Created" << std::endl;
@@ -65,16 +71,22 @@ void CActor::ShootInput(GLfloat deltaTime, CInput* gameInput)
 
 void CActor::BulletUpdate()
 {
-	for (std::map<CActorBullet*, vec2>::iterator bulletIndex = bulletsInScene.begin(); bulletIndex != bulletsInScene.end(); ++bulletIndex)
+	for (std::map<CActorBullet*, vec2>::iterator bulletIndex = bulletsInScene.begin(); bulletIndex != bulletsInScene.end(); bulletIndex++)
 	{
 		bulletIndex->first->BulletUpdate(bulletIndex->second.x, bulletIndex->second.y);
 		bulletIndex->first->Update();
+
+		if (bulletIndex->first->objPosition.x > (objPosition.x + 50) || bulletIndex->first->objPosition.z > (objPosition.z + 50))
+		{
+			delete bulletIndex->first;
+			//bulletIndex = bulletsInScene.erase(bulletIndex);
+		}
 	}
 }
 
 void CActor::BulletRender()
 {
-	for (std::map<CActorBullet*, vec2>::iterator bulletIndex = bulletsInScene.begin(); bulletIndex != bulletsInScene.end(); ++bulletIndex)
+	for (std::map<CActorBullet*, vec2>::iterator bulletIndex = bulletsInScene.begin(); bulletIndex != bulletsInScene.end(); bulletIndex++)
 	{
 		bulletIndex->first->Render();
 	}

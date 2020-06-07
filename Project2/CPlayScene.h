@@ -16,7 +16,7 @@
 class CPlayScene
 {
 public:
-	CPlayScene(CCamera* _gameCamera, CInput* _gameInput);
+	CPlayScene(CCamera* _gameCamera, CInput* _gameInput, FMOD::System* _audioSystem);
 	~CPlayScene();
 
 	void Render();
@@ -40,6 +40,8 @@ public:
 
 	GLint program;
 	GLint skyboxProgram;
+
+	FMOD::System* audioSystem;
 
 	CCamera* gameCamera;
 	CInput* gameInput;

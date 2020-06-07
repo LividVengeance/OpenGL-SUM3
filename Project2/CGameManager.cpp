@@ -65,7 +65,13 @@ CGameManager::CGameManager(int argc, char** argv)
 	gameMainMenuScene = new CMainMenuScene(gameCamera, gameInput);
 
 	// Creates the play scene
-	gamePlayScene = new CPlayScene(gameCamera, gameInput);
+	gamePlayScene = new CPlayScene(gameCamera, gameInput, audioSystem);
+
+	// Create Audio Syetem																									  
+	CreateAudioSystem();
+	// Creates and plays the background music
+	CAudio backingTrack("Resources/Audio/Background.mp3", audioSystem, true);
+	backingTrack.PlaySound();
 
 	currentScene = EMainMenuScene;
 }
