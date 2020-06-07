@@ -83,3 +83,15 @@ bool CInput::getClick(int button)
 		return(false);
 	}
 }
+
+bool CInput::GetFirstDown(int button)
+{
+	if (MouseState[button] == INPUT_DOWN_FIRST)
+	{
+		return(true);
+	}
+	else
+	{
+		return(false);
+	}
+}

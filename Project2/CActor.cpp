@@ -39,19 +39,26 @@ void CActor::MoveInput(GLfloat deltaTime, CInput* gameInput)
 
 void CActor::ShootInput(GLfloat deltaTime, CInput* gameInput)
 {
+	float offSetX = Utils::SCR_WIDTH / 2;
+	float offSetY = Utils::SCR_HEIGHT / 2;
+
 	float mouseX = gameInput->getMouseX();
 	float mouseY = gameInput->getMouseY();
+
+	float mouseXFit = -(offSetX - mouseX);
+	float mouseYFit = -(offSetY - mouseY);
 	
 	if (gameInput->getClick(0))
 	{
 		vec2 mousePos
 		{
-			mouseX, mouseY,
+			mouseXFit, mouseYFit,
 		};
 	
-		newBullet = new CActorBullet(&program, actorSphere->GetVAO(), actorSphere->GetIndiceCount(), gameCamera, &texture);
+		newBullet = new CActorBullet(&program, actorSphere->GetVAO(), actorSphere->GetIndiceCount(), gameCamera, &texture, this);
 		bulletsInScene.insert(std::make_pair(newBullet, mousePos));
-	
+
+		newBullet->BulletUpdate(mousePos.x, mousePos.y);
 		std::cout << "Bullet Created" << std::endl;
 	}
 }
@@ -60,8 +67,7 @@ void CActor::BulletUpdate()
 {
 	for (std::map<CActorBullet*, vec2>::iterator bulletIndex = bulletsInScene.begin(); bulletIndex != bulletsInScene.end(); ++bulletIndex)
 	{
-		bulletIndex->first->FirstShot(bulletIndex->second.x, bulletIndex->second.y);
-		
+		bulletIndex->first->BulletUpdate(bulletIndex->second.x, bulletIndex->second.y);
 		bulletIndex->first->Update();
 	}
 }
@@ -70,8 +76,6 @@ void CActor::BulletRender()
 {
 	for (std::map<CActorBullet*, vec2>::iterator bulletIndex = bulletsInScene.begin(); bulletIndex != bulletsInScene.end(); ++bulletIndex)
 	{
-		bulletIndex->first->FirstShot(bulletIndex->second.x, bulletIndex->second.y);
-
 		bulletIndex->first->Render();
 	}
 }

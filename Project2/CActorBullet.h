@@ -5,16 +5,15 @@
 class CActorBullet : public CObject
 {
 public:
-	CActorBullet(GLint* _program, GLuint* _VAO, int _indiceCount, CCamera* _gameCamera, GLuint* _texture);
+	CActorBullet(GLint* _program, GLuint* _VAO, int _indiceCount, CCamera* _gameCamera, GLuint* _texture, CObject* gameActor);
 	~CActorBullet();
 
-	void Update();
-	void FirstShot(float mouseX, float mouseY);
+	void BulletUpdate(float mouseX, float mouseY);
 
 	vec3 previousActorVelocity;
 	vec3 actorVelocity;
 	float maxSpeed = 0.1f;;
-	float maxForce = 2.0f;;
+	float maxForce = 0.2f;;
 protected:
 };
 

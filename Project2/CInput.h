@@ -34,6 +34,8 @@ public:
 	int getMouseY();
 	bool getClick(int button);
 
+	bool GetFirstDown(int button);
+
 	int mouseX = 0;
 	int mouseY = 0;
 
