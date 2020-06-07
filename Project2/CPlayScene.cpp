@@ -43,8 +43,9 @@ void CPlayScene::Render()
 	gameActor->Render();
 	actorEnemy->Render();
 
-	//model->Render(actorEnemy);
+	gameActor->BulletRender(); // Renders all the bullets in the scene
 
+	//model->Render(actorEnemy);
 	// Labels
 	actorHealthLabel->Render();
 	actorScoreLabel->Render();
@@ -62,6 +63,9 @@ void CPlayScene::Update(GLfloat* deltaTime, ESceneManager* _currentScene)
 	// Actors
 	gameActor->Update();
 	gameActor->MoveInput(*deltaTime, gameInput);
+
+	gameActor->ShootInput(*deltaTime, gameInput); // Creates bullet on mouse click
+	gameActor->BulletUpdate(); // Updates all the bullents in scene
 
 	actorEnemy->Update();
 	actorEnemy->SteeringSeek(*deltaTime, gameActor);

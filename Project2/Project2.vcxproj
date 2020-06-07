@@ -144,6 +144,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="CActor.cpp" />
+    <ClCompile Include="CActorBullet.cpp" />
     <ClCompile Include="CActorEnemy.cpp" />
     <ClCompile Include="CAudio.cpp" />
     <ClCompile Include="CCamera.cpp" />
@@ -162,6 +163,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CActor.h" />
+    <ClInclude Include="CActorBullet.h" />
     <ClInclude Include="CActorEnemy.h" />
     <ClInclude Include="CAudio.h" />
     <ClInclude Include="CCamera.h" />
