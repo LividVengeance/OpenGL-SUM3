@@ -37,6 +37,9 @@ CGameOverScene::CGameOverScene(CCamera* _gameCamera, CInput* _gameInput)
 
 	titleObj->objPosition.x -= (Utils::SCR_WIDTH / 2) - 225;
 	titleObj->objPosition.y += (Utils::SCR_HEIGHT / 2) - 75;
+
+	// Displays Score
+	scoreLabel = new CTextLabel("100", "Resources/Fonts/arial.ttf", glm::vec2(320.0f, 435.0f), glm::vec3(1.0f, 1.0f, 1.0f), 0.8f);
 }
 
 CGameOverScene::~CGameOverScene()
@@ -70,6 +73,8 @@ void CGameOverScene::Render()
 {
 	glUseProgram(program);
 	glDisable(GL_CULL_FACE);
+
+	scoreLabel->Render();
 
 	playButtonObj->Render2D();
 	menuButtonObj->Render2D();

@@ -13,6 +13,7 @@
 #include "CObject.h"
 #include "CPlane.h"
 #include "CShaderLoader.h"
+#include "CTextLabel.h"
 
 class CGameOverScene
 {
@@ -51,6 +52,8 @@ public:
 	// Button Type
 	CPlane* buttonPlane;
 	CPlane* titlePlane;
+	// Label
+	CTextLabel* scoreLabel;
 
 	CInput* gameInput;
 
