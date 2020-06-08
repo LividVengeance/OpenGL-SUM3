@@ -44,7 +44,6 @@ void CMainMenuScene::Render()
 
 	playButtonObj->Render2D();
 	exitButtonObj->Render2D();
-
 	titleObj->Render2D();
 
 	glBindVertexArray(0);		// Unbinding VAO
@@ -62,7 +61,7 @@ void CMainMenuScene::Update(GLfloat* deltaTime, ESceneManager* _currentScene)
 	titleObj->Update();
 
 	// Mouse has clicked button check
-	if (Button(200, 50, playButtonObj) || gameInput->getKeyState('e'))
+	if (Button(200, 50, playButtonObj))
 	{
 		// Play Button
 		*currentScene = EPlayScene;

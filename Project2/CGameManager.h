@@ -64,6 +64,7 @@ private:
 	// Program Scenes
 	CMainMenuScene* gameMainMenuScene;
 	CPlayScene* gamePlayScene;
+	CGameOverScene* gameOverScene;
 
 	float timeElapsed = 0;
 	ESceneManager currentScene;

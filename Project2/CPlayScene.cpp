@@ -25,7 +25,6 @@ CPlayScene::CPlayScene(CCamera* _gameCamera, CInput* _gameInput, FMOD::System* _
 	model = new Model("Resources/Models/Tank/Tank.obj", gameCamera);
 	actorEnemyPyramid = new CPyramid();
 	actorEnemy = new CActorEnemy(&enemyProgram, actorSphere->GetVAO(), actorSphere->GetIndiceCount(), gameCamera, &actorTex);
-
 	
 	gameActor = new CActor(&program, actorSphere->GetVAO(), actorSphere->GetIndiceCount(), gameCamera, &actorTex, audioSystem);
 
@@ -84,6 +83,13 @@ void CPlayScene::Update(GLfloat* deltaTime, ESceneManager* _currentScene)
 	std::string healthStr = "Health: ";
 	healthStr += std::to_string(gameActor->actorHealth);
 	actorHealthLabel->SetText(healthStr);
+
+	// Change Scene To GameOverScene On player Death
+	if (gameActor->actorHealth <= 0)
+	{
+		*currentScene = EGameOverScene;
+		ResetScene(); // Resets the scene for the next play
+	}
 }
 
 void CPlayScene::TextureGen(const char* textureLocation, GLuint* texture)
@@ -107,4 +113,10 @@ void CPlayScene::TextureGen(const char* textureLocation, GLuint* texture)
 
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+}
+
+void CPlayScene::ResetScene()
+{
+	delete gameActor;
+	gameActor = new CActor(&program, actorSphere->GetVAO(), actorSphere->GetIndiceCount(), gameCamera, &actorTex, audioSystem);
 }

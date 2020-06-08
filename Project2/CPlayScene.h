@@ -23,6 +23,7 @@ public:
 	void Update(GLfloat* deltaTime, ESceneManager* _currentScene);
 
 	void TextureGen(const char* textureLocation, GLuint* texture);
+	void ResetScene();
 
 	ESceneManager* currentScene;
 

@@ -5,6 +5,9 @@ CActor::CActor(GLint* _program, GLuint* _VAO, int _indiceCount, CCamera* _gameCa
 {
 	audioSystem = _audioSystem;
 
+	actorHealth = 10;
+	actorScore = 0;
+
 	shootTrack = new CAudio("Resources/Audio/Thump.wav", audioSystem, false);
 
 	program = CShaderLoader::CreateProgram("Resources/Shaders/Basic-Normal.vs",
@@ -15,6 +18,20 @@ CActor::CActor(GLint* _program, GLuint* _VAO, int _indiceCount, CCamera* _gameCa
 	TextureGen(fileLocationBullet, &texture);
 	
 	actorSphere = new CSphere();
+}
+
+CActor::~CActor()
+{
+	// Deletes all CActorBullets in scene
+	std::map<CActorBullet*, vec2>::iterator bulletIndex = bulletsInScene.begin();
+	for (int i = 0; i < bulletsInScene.size(); i++)
+	{
+		delete bulletIndex->first;
+		bulletIndex = bulletsInScene.erase(bulletIndex);
+	}
+	
+	// Clears map of bullets un scene
+	bulletsInScene.empty();
 }
 
 void CActor::MoveInput(GLfloat deltaTime, CInput* gameInput)
@@ -38,6 +55,12 @@ void CActor::MoveInput(GLfloat deltaTime, CInput* gameInput)
 	if (gameInput->getKeyState('S') == true || gameInput->getKeyState('s') == true)
 	{
 		objPosition.z += 20.0f * deltaTime;
+	}
+
+
+	if (gameInput->getKeyState('l'))
+	{
+		actorHealth--;
 	}
 }
 

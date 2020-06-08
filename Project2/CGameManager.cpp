@@ -73,6 +73,9 @@ CGameManager::CGameManager(int argc, char** argv)
 	// Creates the play scene
 	gamePlayScene = new CPlayScene(gameCamera, gameInput, audioSystem);
 
+	// Creates the game over scene
+	gameOverScene = new CGameOverScene(gameCamera, gameInput);
+
 	currentScene = EMainMenuScene;
 }
 
@@ -92,6 +95,10 @@ void CGameManager::Render()
 	else if (currentScene == EPlayScene)
 	{
 		gamePlayScene->Render();
+	}
+	else if (currentScene == EGameOverScene)
+	{
+		gameOverScene->Render();
 	}
 
 	glutSwapBuffers();
@@ -113,6 +120,10 @@ void CGameManager::Update()
 	else if (currentScene == EPlayScene)
 	{
 		gamePlayScene->Update(&deltaTime, &currentScene);
+	}
+	else if (currentScene == EGameOverScene)
+	{
+		gameOverScene->Update(&deltaTime, &currentScene);
 	}
 
 	glutPostRedisplay();

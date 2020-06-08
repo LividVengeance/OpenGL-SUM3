@@ -41,10 +41,12 @@ public:
 	// Button Textures
 	GLuint playButtonTex;
 	GLuint menuButtonTex;
+	GLuint scoreTex;
 	GLuint titleTex;
 	// Button Objects
 	CObject* playButtonObj;
 	CObject* menuButtonObj;
+	CObject* scoreObj;
 	CObject* titleObj;
 	// Button Type
 	CPlane* buttonPlane;
