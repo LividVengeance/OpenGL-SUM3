@@ -71,16 +71,18 @@ void CActor::ShootInput(GLfloat deltaTime, CInput* gameInput)
 
 void CActor::BulletUpdate()
 {
-	for (std::map<CActorBullet*, vec2>::iterator bulletIndex = bulletsInScene.begin(); bulletIndex != bulletsInScene.end(); bulletIndex++)
+	std::map<CActorBullet*, vec2>::iterator bulletIndex = bulletsInScene.begin();
+	for(int i = 0; i < bulletsInScene.size(); i++)
 	{
 		bulletIndex->first->BulletUpdate(bulletIndex->second.x, bulletIndex->second.y);
 		bulletIndex->first->Update();
 
 		if (bulletIndex->first->objPosition.x > (objPosition.x + 50) || bulletIndex->first->objPosition.z > (objPosition.z + 50))
 		{
-			delete bulletIndex->first;
+			//delete bulletIndex->first;
 			//bulletIndex = bulletsInScene.erase(bulletIndex);
 		}
+		bulletIndex++;
 	}
 }
 
