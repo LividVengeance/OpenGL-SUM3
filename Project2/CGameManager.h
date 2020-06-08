@@ -1,5 +1,4 @@
 #pragma once
-
 #include <glew.h>
 #include <freeglut.h>
 #include <SOIL.h>
@@ -10,17 +9,24 @@
 #include "gtc/matrix_transform.hpp"
 #include "gtc/type_ptr.hpp"
 
+// Actors
 #include "CActor.h"
+#include "CActorPickupScore.h"
+
+// Objects
+#include "CSkybox.h"
+#include "CTextLabel.h"
+
+// Utilities
 #include "CAudio.h"
 #include "CCamera.h"
 #include "CInput.h"
-#include "CPyramid.h"
-#include "CTextLabel.h"
 #include "CShaderLoader.h"
+
+// Meshes
 #include "CSphere.h"
-#include "CSkybox.h"
 #include "CPlane.h"
-#include "CActorPickup.h"
+#include "CPyramid.h"
 
 // Program Scenes
 #include "CMainMenuScene.h"

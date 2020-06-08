@@ -8,8 +8,6 @@ CPlayScene::CPlayScene(CCamera* _gameCamera, CInput* _gameInput, FMOD::System* _
 	gameInput = _gameInput;
 	audioSystem = _audioSystem;
 
-	playerAlive = true;
-
 	skyboxProgram = CShaderLoader::CreateProgram("Resources/Shaders/skybox.vs",
 		"Resources/Shaders/skybox.fs");
 
@@ -48,7 +46,7 @@ CPlayScene::CPlayScene(CCamera* _gameCamera, CInput* _gameInput, FMOD::System* _
 	const char* fileLocation = "Resources/Textures/BackgroundSprite.png";
 	TextureGen(fileLocation, &pickupTex);
 
-	actorPickup = new CActorPickup(&programPickup, actorSphere->GetVAO(), actorSphere->GetIndiceCount(), gameCamera, &actorTex);
+	actorPickup = new CActorPickupScore(&programPickup, actorSphere->GetVAO(), actorSphere->GetIndiceCount(), gameCamera, &actorTex);
 }
 
 CPlayScene::~CPlayScene()
@@ -95,6 +93,12 @@ void CPlayScene::Update(GLfloat* deltaTime, ESceneManager* _currentScene)
 	actorEnemy->SteeringSeek(*deltaTime, gameActor);
 
 	actorPickup->Update();
+
+	// gameActor coliding with actorEnemy
+	if (CollisionCheck(gameActor, actorEnemy))
+	{
+		gameActor->actorHealth--;
+	}
 
 	// Updates the score label
 	std::string scoreStr = "Score: ";
@@ -144,16 +148,16 @@ void CPlayScene::ResetScene()
 {
 	delete gameActor;
 	gameActor = new CActor(&program, actorSphere->GetVAO(), actorSphere->GetIndiceCount(), gameCamera, &actorTex, audioSystem);
-	playerAlive = true;
 	gameActor->actorHealth = 10;
 }
 
-void CPlayScene::CollisionCheck(CActor* actorOne, CObject* objOne)
+bool CPlayScene::CollisionCheck(CObject* actorOne, CObject* actorTwo)
 {
-	if (glm::length(actorOne->objPosition - objOne->objPosition) < 1)
+	if (glm::length(actorOne->objPosition - actorTwo->objPosition) < 1)
 	{
-		actorOne->actorHealth--;
+		return(true);
 	}
+	return(false);
 }
 
 int CPlayScene::GetPlayerScore()

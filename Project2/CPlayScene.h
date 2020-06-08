@@ -10,7 +10,7 @@
 #include "CPyramid.h"
 #include "CSphere.h"
 #include "CSkybox.h"
-#include "CActorPickup.h"
+#include "CActorPickupScore.h"
 
 #include "Model.h"
 
@@ -24,7 +24,7 @@ public:
 	void Update(GLfloat* deltaTime, ESceneManager* _currentScene);
 
 	void TextureGen(const char* textureLocation, GLuint* texture);
-	void CollisionCheck(CActor* actorOne, CObject* actorTwo);
+	bool CollisionCheck(CObject* actorOne, CObject* actorTwo);
 	void ResetScene();
 	int GetPlayerScore();
 
@@ -50,7 +50,7 @@ public:
 
 	GLuint pickupTex;
 
-	CActorPickup* actorPickup;
+	CActorPickupScore* actorPickup;
 
 	FMOD::System* audioSystem;
 
@@ -59,7 +59,6 @@ public:
 	Model* model;
 	mat4 view;
 
-	bool playerAlive;
 	int gameSceneScore;
 };
 

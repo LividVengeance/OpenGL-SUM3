@@ -1,16 +1,16 @@
-#include "CActorPickup.h"
+#include "CActorPickupScore.h"
 
-CActorPickup::CActorPickup(GLint* _program, GLuint* _VAO, int _indiceCount, CCamera* _gameCamera, GLuint* _texture)
+CActorPickupScore::CActorPickupScore(GLint* _program, GLuint* _VAO, int _indiceCount, CCamera* _gameCamera, GLuint* _texture)
 	: CObject(_program, _VAO, _indiceCount, _gameCamera, _texture)
 {
 
 }
 
-CActorPickup::~CActorPickup()
+CActorPickupScore::~CActorPickupScore()
 {
 }
 
-void CActorPickup::TextureGen(const char* textureLocation, GLuint* texture)
+void CActorPickupScore::TextureGen(const char* textureLocation, GLuint* texture)
 {
 	glGenTextures(1, texture);
 	glBindTexture(GL_TEXTURE_2D, *texture);

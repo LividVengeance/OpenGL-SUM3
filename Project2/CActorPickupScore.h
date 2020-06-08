@@ -3,11 +3,11 @@
 #include "CShaderLoader.h"
 #include "CPyramid.h"
 
-class CActorPickup : public CObject
+class CActorPickupScore : public CObject
 {
 public:
-	CActorPickup(GLint* _program, GLuint* _VAO, int _indiceCount, CCamera* _gameCamera, GLuint* _texture);
-	~CActorPickup();
+	CActorPickupScore(GLint* _program, GLuint* _VAO, int _indiceCount, CCamera* _gameCamera, GLuint* _texture);
+	~CActorPickupScore();
 
 	void TextureGen(const char* textureLocation, GLuint* texture);
 
