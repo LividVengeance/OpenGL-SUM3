@@ -66,6 +66,9 @@ private:
 	CPlayScene* gamePlayScene;
 	CGameOverScene* gameOverScene;
 
+	// Actor
+	int playerScore;
+
 	float timeElapsed = 0;
 	ESceneManager currentScene;
 	GLfloat currentTime, previousTime, deltaTime;

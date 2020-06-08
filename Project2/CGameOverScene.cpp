@@ -1,10 +1,9 @@
 #include "CGameOverScene.h"
 
-CGameOverScene::CGameOverScene(CCamera* _gameCamera, CInput* _gameInput, int actorScore)
+CGameOverScene::CGameOverScene(CCamera* _gameCamera, CInput* _gameInput)
 {
 	gameCamera = _gameCamera;
 	gameInput = _gameInput;
-	playerScore = std::to_string(actorScore);
 
 	program = CShaderLoader::CreateProgram("Resources/Shaders/Basic.vs",
 		"Resources/Shaders/Basic.fs");
@@ -40,17 +39,20 @@ CGameOverScene::CGameOverScene(CCamera* _gameCamera, CInput* _gameInput, int act
 	titleObj->objPosition.y += (Utils::SCR_HEIGHT / 2) - 75;
 
 	// Displays Score
-	scoreLabel = new CTextLabel(playerScore, "Resources/Fonts/arial.ttf", glm::vec2(320.0f, 435.0f), glm::vec3(1.0f, 1.0f, 1.0f), 0.8f);
+	scoreLabel = new CTextLabel("0", "Resources/Fonts/arial.ttf", glm::vec2(320.0f, 435.0f), glm::vec3(1.0f, 1.0f, 1.0f), 0.8f);
 }
 
 CGameOverScene::~CGameOverScene()
 {
 }
 
-void CGameOverScene::Update(GLfloat* deltaTime, ESceneManager* _currentScene)
+void CGameOverScene::Update(GLfloat* deltaTime, ESceneManager* _currentScene, int playerScore)
 {
 	currentScene = _currentScene;
 	gameCamera->Update2D();
+
+	std::string labelStr = std::to_string(playerScore);
+	scoreLabel->SetText(labelStr);
 
 	playButtonObj->Update();
 	menuButtonObj->Update();

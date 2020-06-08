@@ -18,11 +18,11 @@
 class CGameOverScene
 {
 public:
-	CGameOverScene(CCamera* _gameCamera, CInput* _gameInput, int actorHealth);
+	CGameOverScene(CCamera* _gameCamera, CInput* _gameInput);
 	~CGameOverScene();
 
 	void Render();
-	void Update(GLfloat* deltaTime, ESceneManager* _currentScene);
+	void Update(GLfloat* deltaTime, ESceneManager* _currentScene, int playerScore);
 
 	void TextureGen(const char* textureLocation, GLuint* texture);
 	bool Button(float width, float height, CObject* _buttonObj);
@@ -58,6 +58,5 @@ public:
 	CInput* gameInput;
 
 private:
-	std::string playerScore;
 };
 

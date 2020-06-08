@@ -8,6 +8,8 @@ CPlayScene::CPlayScene(CCamera* _gameCamera, CInput* _gameInput, FMOD::System* _
 	gameInput = _gameInput;
 	audioSystem = _audioSystem;
 
+	playerAlive = true;
+
 	skyboxProgram = CShaderLoader::CreateProgram("Resources/Shaders/skybox.vs",
 		"Resources/Shaders/skybox.fs");
 
@@ -35,6 +37,8 @@ CPlayScene::CPlayScene(CCamera* _gameCamera, CInput* _gameInput, FMOD::System* _
 	actorScoreLabel = new CTextLabel("Score: ", "Resources/Fonts/arial.ttf", glm::vec2(10.0f, 520.0f), glm::vec3(1.0f, 0.0f, 0.0f), 0.5f);
 
 	actorEnemy->objPosition.x = 20;
+
+	gameSceneScore = 0;
 }
 
 CPlayScene::~CPlayScene()
@@ -92,6 +96,7 @@ void CPlayScene::Update(GLfloat* deltaTime, ESceneManager* _currentScene)
 	if (gameActor->actorHealth <= 0)
 	{
 		*currentScene = EGameOverScene;
+		gameSceneScore = gameActor->actorScore;
 		ResetScene(); // Resets the scene for the next play
 	}
 
@@ -125,6 +130,8 @@ void CPlayScene::ResetScene()
 {
 	delete gameActor;
 	gameActor = new CActor(&program, actorSphere->GetVAO(), actorSphere->GetIndiceCount(), gameCamera, &actorTex, audioSystem);
+	playerAlive = true;
+	gameActor->actorHealth = 10;
 }
 
 void CPlayScene::CollisionCheck(CActor* actorOne, CObject* objOne)
@@ -135,12 +142,12 @@ void CPlayScene::CollisionCheck(CActor* actorOne, CObject* objOne)
 	int rad = (actorOne->collisionRadus + objOne->collisionRadus);
 	if (dist < rad)
 	{
-		//delete objOne;
 		actorOne->actorHealth--;
 	}
 }
 
 int CPlayScene::GetPlayerScore()
 {
+	// Getting player score for gameover scene
 	return(gameActor->actorScore);
 }

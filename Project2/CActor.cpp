@@ -62,6 +62,10 @@ void CActor::MoveInput(GLfloat deltaTime, CInput* gameInput)
 	{
 		actorHealth--;
 	}
+	if (gameInput->getKeyState('k'))
+	{
+		actorScore++;
+	}
 }
 
 void CActor::ShootInput(GLfloat deltaTime, CInput* gameInput)

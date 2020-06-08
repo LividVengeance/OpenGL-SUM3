@@ -52,5 +52,8 @@ public:
 	CInput* gameInput;
 	Model* model;
 	mat4 view;
+
+	bool playerAlive;
+	int gameSceneScore;
 };
 
