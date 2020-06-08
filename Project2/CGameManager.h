@@ -20,6 +20,7 @@
 #include "CSphere.h"
 #include "CSkybox.h"
 #include "CPlane.h"
+#include "CActorPickup.h"
 
 // Program Scenes
 #include "CMainMenuScene.h"

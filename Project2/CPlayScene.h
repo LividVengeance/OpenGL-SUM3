@@ -10,6 +10,7 @@
 #include "CPyramid.h"
 #include "CSphere.h"
 #include "CSkybox.h"
+#include "CActorPickup.h"
 
 #include "Model.h"
 
@@ -45,6 +46,11 @@ public:
 	GLint program;
 	GLint skyboxProgram;
 	GLint enemyProgram;
+	GLint programPickup;
+
+	GLuint pickupTex;
+
+	CActorPickup* actorPickup;
 
 	FMOD::System* audioSystem;
 

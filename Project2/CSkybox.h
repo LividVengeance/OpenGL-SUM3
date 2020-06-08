@@ -10,6 +10,8 @@ public:
 	void Render();
 	void Update();
 
+	GLuint GetTextureID();
+
 	CCamera* gameCamera;
 	GLuint texID;
 	GLint* program;

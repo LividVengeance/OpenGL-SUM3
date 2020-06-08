@@ -39,11 +39,8 @@ CGameManager::CGameManager(int argc, char** argv)
 	}
 
 	// Sets the clear colour
-	glClearColor(23.0f / 256.0f, 27.0f / 256.0f, 27.0f / 256.0f, 1.0f);
+	glClearColor(23.0f / 256.0f, 27.0f / 256.0f, 27.0f / 256.0f, 1.0f); // Dark Grey
 
-	// Enabling Culling
-	//glCullFace(GL_BACK);
-	//glFrontFace(GL_CCW);
 	// Enabling Culling
 	glCullFace(GL_BACK);
 	glFrontFace(GL_CCW);
@@ -85,6 +82,7 @@ CGameManager::~CGameManager()
 
 void CGameManager::Render()
 {
+	// Clearing back buffer
 	glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
 
 	// Renders based on current scene

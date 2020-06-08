@@ -117,6 +117,9 @@
     <ClCompile Include="CGameOverScene.cpp">
       <Filter>Source Files\GameScenes</Filter>
     </ClCompile>
+    <ClCompile Include="CActorPickup.cpp">
+      <Filter>Source Files\Actors</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CGameManager.h">
@@ -178,6 +181,9 @@
     </ClInclude>
     <ClInclude Include="CGameOverScene.h">
       <Filter>Header Files\GameScenes</Filter>
+    </ClInclude>
+    <ClInclude Include="CActorPickup.h">
+      <Filter>Header Files\Actors</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -39,6 +39,16 @@ CPlayScene::CPlayScene(CCamera* _gameCamera, CInput* _gameInput, FMOD::System* _
 	actorEnemy->objPosition.x = 20;
 
 	gameSceneScore = 0;
+
+
+	programPickup = CShaderLoader::CreateProgram("Resources/Shaders/Reflection.vs",
+		"Resources/Shaders/Reflection.fs");
+
+	// Gen Textures For Actor
+	const char* fileLocation = "Resources/Textures/BackgroundSprite.png";
+	TextureGen(fileLocation, &pickupTex);
+
+	actorPickup = new CActorPickup(&programPickup, actorSphere->GetVAO(), actorSphere->GetIndiceCount(), gameCamera, &actorTex);
 }
 
 CPlayScene::~CPlayScene()
@@ -56,6 +66,8 @@ void CPlayScene::Render()
 	actorEnemy->Render();
 
 	gameActor->BulletRender(); // Renders all the bullets in the scene
+
+	actorPickup->RenderReflection(gameSkybox);
 
 	//model->Render(actorEnemy);
 	// Labels
@@ -81,6 +93,8 @@ void CPlayScene::Update(GLfloat* deltaTime, ESceneManager* _currentScene)
 
 	actorEnemy->Update();
 	actorEnemy->SteeringSeek(*deltaTime, gameActor);
+
+	actorPickup->Update();
 
 	// Updates the score label
 	std::string scoreStr = "Score: ";
@@ -136,11 +150,7 @@ void CPlayScene::ResetScene()
 
 void CPlayScene::CollisionCheck(CActor* actorOne, CObject* objOne)
 {
-	float dist = sqrt(pow(actorOne->objPosition.x - objOne->objPosition.x, 2) *
-		pow(actorOne->objPosition.z - objOne->objPosition.z, 2));
-
-	int rad = (actorOne->collisionRadus + objOne->collisionRadus);
-	if (dist < rad)
+	if (glm::length(actorOne->objPosition - objOne->objPosition) < 1)
 	{
 		actorOne->actorHealth--;
 	}

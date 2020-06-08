@@ -70,9 +70,11 @@ void CActor::MoveInput(GLfloat deltaTime, CInput* gameInput)
 
 void CActor::ShootInput(GLfloat deltaTime, CInput* gameInput)
 {
+	// Half screen width and height
 	float offSetX = Utils::SCR_WIDTH/2;
 	float offSetZ = Utils::SCR_HEIGHT/2;
 
+	// Gets the mouse pos
 	float mouseX = gameInput->getMouseX();
 	float mouseZ = gameInput->getMouseY();
 

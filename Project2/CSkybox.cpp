@@ -54,56 +54,56 @@ CSkybox::CSkybox(GLint* _program, CCamera* _gameCamera)
          size,    -size,    size,
          size,     size,    size,
 
-         // Back
-         -size,     size, -size,
-         -size,    -size, -size,
-          size,    -size, -size,
-          size,     size, -size,
+        // Back
+        -size,     size,    -size,
+        -size,    -size,    -size,
+         size,    -size,    -size,
+         size,     size,    -size,
 
-          // Left
-          -size,     size,    -size,
-          -size,    -size,    -size,
-          -size,    -size,     size,
-          -size,     size,     size,
+        // Left
+        -size,     size,    -size,
+        -size,    -size,    -size,
+        -size,    -size,     size,
+        -size,     size,     size,
 
-          // Right
-           size,     size,     size,
-           size,    -size,     size,
-           size,    -size,    -size,
-           size,     size,    -size,
+        // Right
+         size,     size,     size,
+         size,    -size,     size,
+         size,    -size,    -size,
+         size,     size,    -size,
 
-           // Top
-           -size,     size,    -size,
-           -size,     size,     size,
-            size,     size,     size,
-            size,     size,    -size,
+        // Top
+        -size,     size,    -size,
+        -size,     size,     size,
+         size,     size,     size,
+         size,     size,    -size,
 
-            // Bottom
-            -size,    -size,     size,
-            -size,    -size,    -size,
-             size,    -size,    -size,
-             size,    -size,     size,
+        // Bottom
+        -size,    -size,     size,
+        -size,    -size,    -size,
+         size,    -size,    -size,
+         size,    -size,     size,
     };
 
     GLuint indices[] =
     {
-        0,    2,    1,
-        0,    3,    2,
+        0,  2,  1,
+        0,  3,  2,
 
-        7,    5,    6,
-        7,    4,    5,
+        7,  5,  6,
+        7,  4,  5,
 
-        8,    10,    9,
-        8,    11,    10,
+        8,  10, 9,
+        8,  11, 10,
 
-        12,    14,    13,
-        12,    15,    14,
+        12, 14, 13,
+        12, 15, 14,
 
-        16,    18,    17,
-        16,    19,    18,
+        16, 18, 17,
+        16, 19, 18,
 
-        20,    22,    21,
-        20,    23,    22,
+        20, 22, 21,
+        20, 23, 22,
     };
 
     glGenVertexArrays(1, &VAO);
@@ -120,8 +120,6 @@ CSkybox::CSkybox(GLint* _program, CCamera* _gameCamera)
     // Makes the points Point things
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), (GLvoid*)0);
     glEnableVertexAttribArray(0);
-
-	
 }
 
 CSkybox::~CSkybox()
@@ -148,4 +146,9 @@ void CSkybox::Update()
 {
 	mat4 model = scale(mat4(), vec3(200.0f, 200.0f, 200.0f));
 	MVP = gameCamera->CameraProjection() * gameCamera->CameraView() * model;
+}
+
+GLuint CSkybox::GetTextureID()
+{
+    return(texID);
 }

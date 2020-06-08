@@ -89,3 +89,32 @@ void CObject::Render2D()
 	glBindVertexArray(0);
 	glUseProgram(0);
 }
+
+void CObject::RenderReflection(CSkybox* skyboxObj)
+{
+	glUseProgram(*program);
+	glBindVertexArray(*VAO);		// Bind VAO
+
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+	glActiveTexture(GL_TEXTURE1);
+	glUniform1i(glGetUniformLocation(*program, "skybox"), 1);
+	glBindTexture(GL_TEXTURE_CUBE_MAP, skyboxObj->GetTextureID());
+
+	GLuint modelLoc = glGetUniformLocation(*program, "model");
+	glUniformMatrix4fv(modelLoc, 1, GL_FALSE, value_ptr(objModelMatrix));
+
+	GLuint projection = glGetUniformLocation(*program, "proj");
+	glUniformMatrix4fv(projection, 1, GL_FALSE, value_ptr(gameCamera->CameraProjection()));
+
+	GLuint view = glGetUniformLocation(*program, "view");
+	glUniformMatrix4fv(view, 1, GL_FALSE, value_ptr(gameCamera->CameraView()));
+
+	GLuint camPos = glGetUniformLocation(*program, "camPos");
+	glUniform3fv(camPos, 1, value_ptr(gameCamera->GetCamPos()));
+
+	glDrawElements(GL_TRIANGLES, indiceCount, GL_UNSIGNED_INT, 0); // Drawing Background
+	glBindVertexArray(0);
+	glUseProgram(0);
+}

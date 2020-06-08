@@ -2,6 +2,7 @@
 
 #include "CCamera.h"
 #include "CInput.h"
+#include "CSkybox.h"
 
 class CObject
 {
@@ -12,6 +13,7 @@ public:
 	void Update();
 	void Render();
 	void Render2D();
+	void RenderReflection(CSkybox* skyboxObj);
 
 	// Object Location
 	vec3 objPosition;
@@ -29,7 +31,5 @@ protected:
 	float indiceCount;
 	CCamera* gameCamera;
 	GLuint* texture;
-
-	
 };
 
