@@ -1,5 +1,4 @@
 #pragma once
-
 #include "CGameManager.h"
 
 CGameManager* globalPointerGM;

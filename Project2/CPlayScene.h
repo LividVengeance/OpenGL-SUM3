@@ -40,6 +40,7 @@ public:
 
 	GLint program;
 	GLint skyboxProgram;
+	GLint enemyProgram;
 
 	FMOD::System* audioSystem;
 

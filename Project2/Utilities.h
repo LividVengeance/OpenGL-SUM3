@@ -5,6 +5,7 @@ enum ESceneManager
 {
 	EMainMenuScene,
 	EPlayScene,
+	EGameOverScene,
 };
 
 // KeyBoard States

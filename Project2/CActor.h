@@ -21,6 +21,7 @@ public:
 	void BulletRender();
 
 	std::map<CActorBullet*, vec2> bulletsInScene;
+	int shootDist = 50;
 	
 	CAudio* shootTrack;
 

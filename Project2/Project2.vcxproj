@@ -149,6 +149,7 @@
     <ClCompile Include="CAudio.cpp" />
     <ClCompile Include="CCamera.cpp" />
     <ClCompile Include="CGameManager.cpp" />
+    <ClCompile Include="CGameOverScene.cpp" />
     <ClCompile Include="CInput.cpp" />
     <ClCompile Include="CMainMenuScene.cpp" />
     <ClCompile Include="CObject.cpp" />
@@ -168,6 +169,7 @@
     <ClInclude Include="CAudio.h" />
     <ClInclude Include="CCamera.h" />
     <ClInclude Include="CGameManager.h" />
+    <ClInclude Include="CGameOverScene.h" />
     <ClInclude Include="CInput.h" />
     <ClInclude Include="CMainMenuScene.h" />
     <ClInclude Include="CObject.h" />

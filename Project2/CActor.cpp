@@ -72,17 +72,22 @@ void CActor::ShootInput(GLfloat deltaTime, CInput* gameInput)
 void CActor::BulletUpdate()
 {
 	std::map<CActorBullet*, vec2>::iterator bulletIndex = bulletsInScene.begin();
-	for(int i = 0; i < bulletsInScene.size(); i++)
+	for (int i = 0; i < bulletsInScene.size(); i++)
 	{
 		bulletIndex->first->BulletUpdate(bulletIndex->second.x, bulletIndex->second.y);
 		bulletIndex->first->Update();
 
-		if (bulletIndex->first->objPosition.x > (objPosition.x + 50) || bulletIndex->first->objPosition.z > (objPosition.z + 50))
+		// If the bullet is far enough away from actor(shootDist) then delete bullet
+		if (bulletIndex->first->objPosition.x > (objPosition.x + shootDist) || bulletIndex->first->objPosition.x < (objPosition.x - shootDist) ||
+			bulletIndex->first->objPosition.z > (objPosition.z + shootDist) || bulletIndex->first->objPosition.z < (objPosition.z - shootDist))
 		{
-			//delete bulletIndex->first;
-			//bulletIndex = bulletsInScene.erase(bulletIndex);
+			delete bulletIndex->first;
+			bulletIndex = bulletsInScene.erase(bulletIndex);
 		}
-		bulletIndex++;
+		else
+		{
+			bulletIndex++;
+		}
 	}
 }
 

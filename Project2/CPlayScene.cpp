@@ -12,17 +12,21 @@ CPlayScene::CPlayScene(CCamera* _gameCamera, CInput* _gameInput, FMOD::System* _
 	program = CShaderLoader::CreateProgram("Resources/Shaders/Basic-Normal.vs",
 		"Resources/Shaders/Blinn-Phong.fs");
 
+	enemyProgram = CShaderLoader::CreateProgram("Resources/Shaders/Basic-Normal.vs",
+		"Resources/Shaders/RimLighting.fs");
+
 	// Gen Textures For Actor
 	const char* fileLocationPlay = "Resources/Textures/BackgroundSprite.png";
 	TextureGen(fileLocationPlay, &actorTex);
 
 	gameSkybox = new CSkybox(&skyboxProgram, gameCamera);
-	
-	//model = new Model("Resources/Models/Tank/Tank.obj", gameCamera);
-	actorEnemyPyramid = new CPyramid();
-	actorEnemy = new CActorEnemy(&program, actorEnemyPyramid->GetVAO(), actorEnemyPyramid->GetIndiceCount(), gameCamera, &actorTex);
-
 	actorSphere = new CSphere();
+	
+	model = new Model("Resources/Models/Tank/Tank.obj", gameCamera);
+	actorEnemyPyramid = new CPyramid();
+	actorEnemy = new CActorEnemy(&enemyProgram, actorSphere->GetVAO(), actorSphere->GetIndiceCount(), gameCamera, &actorTex);
+
+	
 	gameActor = new CActor(&program, actorSphere->GetVAO(), actorSphere->GetIndiceCount(), gameCamera, &actorTex, audioSystem);
 
 	// Labels

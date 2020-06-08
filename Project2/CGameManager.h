@@ -24,6 +24,7 @@
 // Program Scenes
 #include "CMainMenuScene.h"
 #include "CPlayScene.h"
+#include "CGameOverScene.h"
 
 class CGameManager
 {
