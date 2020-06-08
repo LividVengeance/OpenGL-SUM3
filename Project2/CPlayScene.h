@@ -46,9 +46,7 @@ public:
 	GLint program;
 	GLint skyboxProgram;
 	GLint enemyProgram;
-	GLint programPickup;
-
-	GLuint pickupTex;
+	GLint pickupProgram;
 
 	CActorPickupScore* actorPickup;
 

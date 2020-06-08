@@ -8,45 +8,45 @@ CPlayScene::CPlayScene(CCamera* _gameCamera, CInput* _gameInput, FMOD::System* _
 	gameInput = _gameInput;
 	audioSystem = _audioSystem;
 
-	skyboxProgram = CShaderLoader::CreateProgram("Resources/Shaders/skybox.vs",
-		"Resources/Shaders/skybox.fs");
+	gameSceneScore = 0;
 
+	// Creates Programs For Objects In Scene
 	program = CShaderLoader::CreateProgram("Resources/Shaders/Basic-Normal.vs",
 		"Resources/Shaders/Blinn-Phong.fs");
+
+	skyboxProgram = CShaderLoader::CreateProgram("Resources/Shaders/skybox.vs",
+		"Resources/Shaders/skybox.fs");
 
 	enemyProgram = CShaderLoader::CreateProgram("Resources/Shaders/Basic-Normal.vs",
 		"Resources/Shaders/RimLighting.fs");
 
-	// Gen Textures For Actor
+	pickupProgram = CShaderLoader::CreateProgram("Resources/Shaders/Reflection.vs",
+		"Resources/Shaders/Reflection.fs");
+
+	// Generate Texture For Actors In Scene
 	const char* fileLocationPlay = "Resources/Textures/BackgroundSprite.png";
 	TextureGen(fileLocationPlay, &actorTex);
 
-	gameSkybox = new CSkybox(&skyboxProgram, gameCamera);
+	// Creates Meshes/Models
 	actorSphere = new CSphere();
-	
-	model = new Model("Resources/Models/Tank/Tank.obj", gameCamera);
 	actorEnemyPyramid = new CPyramid();
-	actorEnemy = new CActorEnemy(&enemyProgram, actorSphere->GetVAO(), actorSphere->GetIndiceCount(), gameCamera, &actorTex);
+	model = new Model("Resources/Models/Tank/Tank.obj", gameCamera);
+
+	// Create Skybox
+	gameSkybox = new CSkybox(&skyboxProgram, gameCamera);
 	
+	// Create Actors
+	actorEnemy = new CActorEnemy(&enemyProgram, actorSphere->GetVAO(), actorSphere->GetIndiceCount(), gameCamera, &actorTex);
 	gameActor = new CActor(&program, actorSphere->GetVAO(), actorSphere->GetIndiceCount(), gameCamera, &actorTex, audioSystem);
+	actorPickup = new CActorPickupScore(&pickupProgram, actorSphere->GetVAO(), actorSphere->GetIndiceCount(), gameCamera, &actorTex);
 
 	// Labels
 	actorHealthLabel = new CTextLabel("Health: ", "Resources/Fonts/arial.ttf", glm::vec2(10.0f, 560.0f), glm::vec3(1.0f, 0.0f, 0.0f), 0.5f);
 	actorScoreLabel = new CTextLabel("Score: ", "Resources/Fonts/arial.ttf", glm::vec2(10.0f, 520.0f), glm::vec3(1.0f, 0.0f, 0.0f), 0.5f);
 
+	// Move Objects Start Position
 	actorEnemy->objPosition.x = 20;
-
-	gameSceneScore = 0;
-
-
-	programPickup = CShaderLoader::CreateProgram("Resources/Shaders/Reflection.vs",
-		"Resources/Shaders/Reflection.fs");
-
-	// Gen Textures For Actor
-	const char* fileLocation = "Resources/Textures/BackgroundSprite.png";
-	TextureGen(fileLocation, &pickupTex);
-
-	actorPickup = new CActorPickupScore(&programPickup, actorSphere->GetVAO(), actorSphere->GetIndiceCount(), gameCamera, &actorTex);
+	actorPickup->objPosition.x = -20;
 }
 
 CPlayScene::~CPlayScene()
@@ -61,13 +61,11 @@ void CPlayScene::Render()
 
 	// Actors
 	gameActor->Render();
-	actorEnemy->Render();
-
 	gameActor->BulletRender(); // Renders all the bullets in the scene
-
+	actorEnemy->Render();
 	actorPickup->RenderReflection(gameSkybox);
-
 	//model->Render(actorEnemy);
+
 	// Labels
 	actorHealthLabel->Render();
 	actorScoreLabel->Render();
@@ -85,19 +83,36 @@ void CPlayScene::Update(GLfloat* deltaTime, ESceneManager* _currentScene)
 	// Actors
 	gameActor->Update();
 	gameActor->MoveInput(*deltaTime, gameInput);
-
 	gameActor->ShootInput(*deltaTime, gameInput); // Creates bullet on mouse click
 	gameActor->BulletUpdate(); // Updates all the bullents in scene
-
 	actorEnemy->Update();
 	actorEnemy->SteeringSeek(*deltaTime, gameActor);
-
 	actorPickup->Update();
 
-	// gameActor coliding with actorEnemy
+	// gameActor lose health on collision actorEnemy
 	if (CollisionCheck(gameActor, actorEnemy))
 	{
 		gameActor->actorHealth--;
+	}
+	// gameActor gain score on collision actorPickup
+	if (CollisionCheck(gameActor, actorPickup))
+	{
+		gameActor->actorScore += 100;
+	}
+	// Destory actorEnemy on collision actorBullet
+	std::map<CActorBullet*, vec2>::iterator bulletIndex = gameActor->bulletsInScene.begin();
+	for (int i = 0; i < gameActor->bulletsInScene.size(); i++)
+	{
+		if (CollisionCheck(bulletIndex->first, actorEnemy))
+		{
+			delete bulletIndex->first;
+			bulletIndex = gameActor->bulletsInScene.erase(bulletIndex);
+			std::cout << "Bullet Hit Enemy" << std::endl;
+		}
+		else
+		{
+			bulletIndex++;
+		}
 	}
 
 	// Updates the score label
