@@ -74,7 +74,7 @@ CGameManager::CGameManager(int argc, char** argv)
 	gamePlayScene = new CPlayScene(gameCamera, gameInput, audioSystem);
 
 	// Creates the game over scene
-	gameOverScene = new CGameOverScene(gameCamera, gameInput);
+	gameOverScene = new CGameOverScene(gameCamera, gameInput, gamePlayScene->GetPlayerScore());
 
 	currentScene = EMainMenuScene;
 }

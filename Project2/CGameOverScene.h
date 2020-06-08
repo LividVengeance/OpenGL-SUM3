@@ -18,7 +18,7 @@
 class CGameOverScene
 {
 public:
-	CGameOverScene(CCamera* _gameCamera, CInput* _gameInput);
+	CGameOverScene(CCamera* _gameCamera, CInput* _gameInput, int actorHealth);
 	~CGameOverScene();
 
 	void Render();
@@ -27,8 +27,8 @@ public:
 	void TextureGen(const char* textureLocation, GLuint* texture);
 	bool Button(float width, float height, CObject* _buttonObj);
 
-	float mouseX;
-	float mouseY;
+	int mouseX;
+	int mouseY;
 
 	float offSetX = Utils::SCR_WIDTH / 2;
 	float offSextY = Utils::SCR_HEIGHT / 2;
@@ -58,6 +58,6 @@ public:
 	CInput* gameInput;
 
 private:
-
+	std::string playerScore;
 };
 

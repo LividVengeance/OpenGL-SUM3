@@ -72,28 +72,31 @@ void CActor::ShootInput(GLfloat deltaTime, CInput* gameInput)
 	float mouseX = gameInput->getMouseX();
 	float mouseZ = gameInput->getMouseY();
 
+	// Offsets the mouse input for actor
 	float mouseXFit = -(offSetX - mouseX);
 	float mouseZFit = -(offSetZ - mouseZ);
 	
 	if (gameInput->getClick(0))
 	{
+		// Gets the mouse pos (when clicked)
 		vec2 mousePos
 		{
 			mouseXFit, mouseZFit,
 		};
-	
+
+		// Create bullet actor and add it to map with mouse pos
 		newBullet = new CActorBullet(&program, actorSphere->GetVAO(), actorSphere->GetIndiceCount(), gameCamera, &texture, this);
 		bulletsInScene.insert(std::make_pair(newBullet, mousePos));
 
 		shootTrack->PlaySound();
 
 		newBullet->BulletUpdate(mousePos.x, mousePos.y);
-		std::cout << "Bullet Created" << std::endl;
 	}
 }
 
 void CActor::BulletUpdate()
 {
+	// Upadate all bullets in the scene
 	std::map<CActorBullet*, vec2>::iterator bulletIndex = bulletsInScene.begin();
 	for (int i = 0; i < bulletsInScene.size(); i++)
 	{
@@ -116,6 +119,7 @@ void CActor::BulletUpdate()
 
 void CActor::BulletRender()
 {
+	// Render all bullets in game scene
 	for (std::map<CActorBullet*, vec2>::iterator bulletIndex = bulletsInScene.begin(); bulletIndex != bulletsInScene.end(); bulletIndex++)
 	{
 		bulletIndex->first->Render();

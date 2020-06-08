@@ -21,6 +21,8 @@ public:
 	float objScaleAmount;
 	mat4 objModelMatrix;
 
+	float collisionRadus = 0.5;
+
 protected:
 	GLint* program;
 	GLuint* VAO;

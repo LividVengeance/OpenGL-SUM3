@@ -1,5 +1,7 @@
 #include "CPlayScene.h"
 
+#include <math.h>
+
 CPlayScene::CPlayScene(CCamera* _gameCamera, CInput* _gameInput, FMOD::System* _audioSystem)
 {
 	gameCamera = _gameCamera;
@@ -31,6 +33,8 @@ CPlayScene::CPlayScene(CCamera* _gameCamera, CInput* _gameInput, FMOD::System* _
 	// Labels
 	actorHealthLabel = new CTextLabel("Health: ", "Resources/Fonts/arial.ttf", glm::vec2(10.0f, 560.0f), glm::vec3(1.0f, 0.0f, 0.0f), 0.5f);
 	actorScoreLabel = new CTextLabel("Score: ", "Resources/Fonts/arial.ttf", glm::vec2(10.0f, 520.0f), glm::vec3(1.0f, 0.0f, 0.0f), 0.5f);
+
+	actorEnemy->objPosition.x = 20;
 }
 
 CPlayScene::~CPlayScene()
@@ -90,6 +94,8 @@ void CPlayScene::Update(GLfloat* deltaTime, ESceneManager* _currentScene)
 		*currentScene = EGameOverScene;
 		ResetScene(); // Resets the scene for the next play
 	}
+
+	CollisionCheck(gameActor, actorEnemy);
 }
 
 void CPlayScene::TextureGen(const char* textureLocation, GLuint* texture)
@@ -119,4 +125,22 @@ void CPlayScene::ResetScene()
 {
 	delete gameActor;
 	gameActor = new CActor(&program, actorSphere->GetVAO(), actorSphere->GetIndiceCount(), gameCamera, &actorTex, audioSystem);
+}
+
+void CPlayScene::CollisionCheck(CActor* actorOne, CObject* objOne)
+{
+	float dist = sqrt(pow(actorOne->objPosition.x - objOne->objPosition.x, 2) *
+		pow(actorOne->objPosition.z - objOne->objPosition.z, 2));
+
+	int rad = (actorOne->collisionRadus + objOne->collisionRadus);
+	if (dist < rad)
+	{
+		//delete objOne;
+		actorOne->actorHealth--;
+	}
+}
+
+int CPlayScene::GetPlayerScore()
+{
+	return(gameActor->actorScore);
 }

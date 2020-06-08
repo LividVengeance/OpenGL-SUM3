@@ -1,9 +1,10 @@
 #include "CGameOverScene.h"
 
-CGameOverScene::CGameOverScene(CCamera* _gameCamera, CInput* _gameInput)
+CGameOverScene::CGameOverScene(CCamera* _gameCamera, CInput* _gameInput, int actorScore)
 {
 	gameCamera = _gameCamera;
 	gameInput = _gameInput;
+	playerScore = std::to_string(actorScore);
 
 	program = CShaderLoader::CreateProgram("Resources/Shaders/Basic.vs",
 		"Resources/Shaders/Basic.fs");
@@ -39,7 +40,7 @@ CGameOverScene::CGameOverScene(CCamera* _gameCamera, CInput* _gameInput)
 	titleObj->objPosition.y += (Utils::SCR_HEIGHT / 2) - 75;
 
 	// Displays Score
-	scoreLabel = new CTextLabel("100", "Resources/Fonts/arial.ttf", glm::vec2(320.0f, 435.0f), glm::vec3(1.0f, 1.0f, 1.0f), 0.8f);
+	scoreLabel = new CTextLabel(playerScore, "Resources/Fonts/arial.ttf", glm::vec2(320.0f, 435.0f), glm::vec3(1.0f, 1.0f, 1.0f), 0.8f);
 }
 
 CGameOverScene::~CGameOverScene()
@@ -93,6 +94,7 @@ bool CGameOverScene::Button(float width, float height, CObject* _buttonObj)
 	float offSetX = Utils::SCR_WIDTH / 2;
 	float offSetY = Utils::SCR_HEIGHT / 2;
 
+	// Checks mouse pos and button pos (and mouse click)
 	if (-(offSetX - mouseX) > _buttonObj->objPosition.x - width / 2 &&
 		-(offSetX - mouseX) < _buttonObj->objPosition.x + width / 2 &&
 		offSetY - mouseY > _buttonObj->objPosition.y - height / 2 &&
