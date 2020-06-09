@@ -7,6 +7,7 @@
 
 #include "CActorEnemy.h"
 #include "CActor.h"
+#include "CActorPickupHealth.h"
 #include "CPyramid.h"
 #include "CSphere.h"
 #include "CSkybox.h"
@@ -31,27 +32,35 @@ public:
 
 	ESceneManager* currentScene;
 
-	// Actor
+	// Textures
 	GLuint actorTex;
-	CPyramid* actorEnemyPyramid;
-	CSphere* actorSphere;
+	GLuint pickupTex;
+
+	// Actors
 	CActor* gameActor;
 	CActorEnemy* actorEnemy;
-	CSkybox* gameSkybox;
+	CActorPickupScore* actorPickup;
+	CActorPickupHealth* actorHealthPickup;
+
+	// Meshes
+	CPyramid* actorEnemyPyramid;
+	CSphere* actorSphere;
 
 	// Labels
 	CTextLabel* actorHealthLabel;
 	CTextLabel* actorScoreLabel;
 
+	// Programs
 	GLint program;
 	GLint skyboxProgram;
 	GLint enemyProgram;
 	GLint pickupProgram;
 
-	CActorPickupScore* actorPickup;
-
+	// Audio
 	FMOD::System* audioSystem;
 
+	// Utilities
+	CSkybox* gameSkybox;
 	CCamera* gameCamera;
 	CInput* gameInput;
 	Model* model;

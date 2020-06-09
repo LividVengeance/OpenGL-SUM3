@@ -26,6 +26,8 @@ CPlayScene::CPlayScene(CCamera* _gameCamera, CInput* _gameInput, FMOD::System* _
 	// Generate Texture For Actors In Scene
 	const char* fileLocationPlay = "Resources/Textures/BackgroundSprite.png";
 	TextureGen(fileLocationPlay, &actorTex);
+	const char* fileLocationPickup = "Resources/Textures/Actors/healthPickupSprite.png";
+	TextureGen(fileLocationPickup, &pickupTex);
 
 	// Creates Meshes/Models
 	actorSphere = new CSphere();
@@ -39,6 +41,7 @@ CPlayScene::CPlayScene(CCamera* _gameCamera, CInput* _gameInput, FMOD::System* _
 	actorEnemy = new CActorEnemy(&enemyProgram, actorSphere->GetVAO(), actorSphere->GetIndiceCount(), gameCamera, &actorTex);
 	gameActor = new CActor(&program, actorSphere->GetVAO(), actorSphere->GetIndiceCount(), gameCamera, &actorTex, audioSystem);
 	actorPickup = new CActorPickupScore(&pickupProgram, actorSphere->GetVAO(), actorSphere->GetIndiceCount(), gameCamera, &actorTex);
+	actorHealthPickup = new CActorPickupHealth(&enemyProgram, actorSphere->GetVAO(), actorSphere->GetIndiceCount(), gameCamera, &pickupTex);
 
 	// Labels
 	actorHealthLabel = new CTextLabel("Health: ", "Resources/Fonts/arial.ttf", glm::vec2(10.0f, 560.0f), glm::vec3(1.0f, 0.0f, 0.0f), 0.5f);
@@ -64,6 +67,7 @@ void CPlayScene::Render()
 	gameActor->BulletRender(); // Renders all the bullets in the scene
 	actorEnemy->Render();
 	actorPickup->RenderReflection(gameSkybox);
+	actorHealthPickup->Render();
 	//model->Render(actorEnemy);
 
 	// Labels
@@ -88,6 +92,7 @@ void CPlayScene::Update(GLfloat* deltaTime, ESceneManager* _currentScene)
 	actorEnemy->Update();
 	actorEnemy->SteeringSeek(*deltaTime, gameActor);
 	actorPickup->Update();
+	actorHealthPickup->Update();
 
 	// gameActor lose health on collision actorEnemy
 	if (CollisionCheck(gameActor, actorEnemy))
@@ -98,6 +103,11 @@ void CPlayScene::Update(GLfloat* deltaTime, ESceneManager* _currentScene)
 	if (CollisionCheck(gameActor, actorPickup))
 	{
 		gameActor->actorScore += 100;
+	}
+	// gameActor gain health on collision actorHealthPickup
+	if (CollisionCheck(gameActor, actorHealthPickup))
+	{
+		gameActor->actorHealth += 5;
 	}
 	// Destory actorEnemy on collision actorBullet
 	std::map<CActorBullet*, vec2>::iterator bulletIndex = gameActor->bulletsInScene.begin();

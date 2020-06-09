@@ -146,6 +146,7 @@
     <ClCompile Include="CActor.cpp" />
     <ClCompile Include="CActorBullet.cpp" />
     <ClCompile Include="CActorEnemy.cpp" />
+    <ClCompile Include="CActorPickupHealth.cpp" />
     <ClCompile Include="CActorPickupScore.cpp" />
     <ClCompile Include="CAudio.cpp" />
     <ClCompile Include="CCamera.cpp" />
@@ -167,6 +168,7 @@
     <ClInclude Include="CActor.h" />
     <ClInclude Include="CActorBullet.h" />
     <ClInclude Include="CActorEnemy.h" />
+    <ClInclude Include="CActorPickupHealth.h" />
     <ClInclude Include="CActorPickupScore.h" />
     <ClInclude Include="CAudio.h" />
     <ClInclude Include="CCamera.h" />

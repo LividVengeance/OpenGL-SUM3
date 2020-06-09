@@ -120,6 +120,9 @@
     <ClCompile Include="CActorPickupScore.cpp">
       <Filter>Source Files\Actors</Filter>
     </ClCompile>
+    <ClCompile Include="CActorPickupHealth.cpp">
+      <Filter>Source Files\Actors</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CGameManager.h">
@@ -183,6 +186,9 @@
       <Filter>Header Files\GameScenes</Filter>
     </ClInclude>
     <ClInclude Include="CActorPickupScore.h">
+      <Filter>Header Files\Actors</Filter>
+    </ClInclude>
+    <ClInclude Include="CActorPickupHealth.h">
       <Filter>Header Files\Actors</Filter>
     </ClInclude>
   </ItemGroup>
