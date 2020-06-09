@@ -23,6 +23,8 @@ CActorEnemyManager::~CActorEnemyManager()
 
 void CActorEnemyManager::Update(GLfloat* deltaTime, CObject* object)
 {
+	//std::cout << enemysInScene.size() << std::endl;
+
 	for (int i = 0; i < enemysInScene.size(); i++)
 	{
 		enemysInScene[i]->Update();
@@ -42,7 +44,7 @@ void CActorEnemyManager::Render()
 
 void CActorEnemyManager::AddEnemy(CObject* object)
 {
-	std::cout << "Create new Actor" << std::endl;
+	std::cout << "Craete Bullet" << std::endl;
 	actorEnemy = new CActorEnemy(&program, actorSphere->GetVAO(), actorSphere->GetIndiceCount(), gameCamera, &actorTex);
 	
 	int randX = rand() % 40;
@@ -59,7 +61,7 @@ void CActorEnemyManager::AddEnemy(CObject* object)
 		randX = -randX;
 		dist = -dist;
 	}
-	if(rand5050Z == 0)
+	if (rand5050Z == 0)
 	{
 		randZ = -randZ;
 		dist = -dist;
@@ -82,9 +84,8 @@ void CActorEnemyManager::WaveCheck(GLfloat* deltaTime, CObject* object)
 	}
 
 	// Enemys in scene check
-	while ((enemysInScene.size() * currentWave) < currentWave * actorsPerWave)
+	while (enemysInScene.size() < (currentWave * actorsPerWave))
 	{
-		std::cout << enemysInScene.size() << std::endl;
 		AddEnemy(object);
 	}
 }
