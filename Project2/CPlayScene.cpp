@@ -173,6 +173,9 @@ void CPlayScene::AllCollisionsInScene()
 		if (CollisionCheck(gameActor, enemyManager->enemysInScene[i]))
 		{
 			gameActor->actorHealth--;
+			delete enemyManager->enemysInScene[i];
+			enemyManager->enemysInScene.erase(enemyManager->enemysInScene.begin() + i);
+			gameActor->actorScore += 10;
 		}
 	}
 
