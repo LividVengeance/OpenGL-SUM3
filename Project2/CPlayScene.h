@@ -1,5 +1,4 @@
 #pragma once
-
 #include "CShaderLoader.h"
 #include "CCamera.h"
 #include "CInput.h"
@@ -8,11 +7,13 @@
 #include "CActorEnemy.h"
 #include "CActor.h"
 #include "CActorPickupHealth.h"
+#include "CActorPickupScore.h"
+
+#include "CActorEnemyManager.h"
+
 #include "CPyramid.h"
 #include "CSphere.h"
 #include "CSkybox.h"
-#include "CActorPickupScore.h"
-
 #include "Model.h"
 
 class CPlayScene
@@ -30,6 +31,7 @@ private:
 	void TextureGen(const char* textureLocation, GLuint* texture);
 	bool CollisionCheck(CObject* actorOne, CObject* actorTwo);
 	void ResetScene();
+	void AllCollisionsInScene();
 
 	// Textures
 	GLuint actorTex;
@@ -37,9 +39,10 @@ private:
 
 	// Actors
 	CActor* gameActor;
-	CActorEnemy* actorEnemy;
 	CActorPickupScore* actorPickup;
 	CActorPickupHealth* actorHealthPickup;
+
+	CActorEnemyManager* enemyManager;
 
 	// Meshes
 	CPyramid* actorEnemyPyramid;
@@ -48,12 +51,13 @@ private:
 	// Labels
 	CTextLabel* actorHealthLabel;
 	CTextLabel* actorScoreLabel;
+	CTextLabel* waveLabel;
 
 	// Programs
 	GLint program;
 	GLint skyboxProgram;
-	GLint enemyProgram;
 	GLint pickupProgram;
+	GLint healthProgram;
 
 	// Audio
 	FMOD::System* audioSystem;

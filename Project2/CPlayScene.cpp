@@ -17,7 +17,7 @@ CPlayScene::CPlayScene(CCamera* _gameCamera, CInput* _gameInput, FMOD::System* _
 	skyboxProgram = CShaderLoader::CreateProgram("Resources/Shaders/skybox.vs",
 		"Resources/Shaders/skybox.fs");
 
-	enemyProgram = CShaderLoader::CreateProgram("Resources/Shaders/Basic-Normal.vs",
+	healthProgram = CShaderLoader::CreateProgram("Resources/Shaders/Basic-Normal.vs",
 		"Resources/Shaders/RimLighting.fs");
 
 	pickupProgram = CShaderLoader::CreateProgram("Resources/Shaders/Reflection.vs",
@@ -39,17 +39,19 @@ CPlayScene::CPlayScene(CCamera* _gameCamera, CInput* _gameInput, FMOD::System* _
 	
 	// Create Actors
 	gameActor = new CActor(&program, actorSphere->GetVAO(), actorSphere->GetIndiceCount(), gameCamera, &actorTex, audioSystem);
-	actorEnemy = new CActorEnemy(&enemyProgram, actorSphere->GetVAO(), actorSphere->GetIndiceCount(), gameCamera, &actorTex);
 	actorPickup = new CActorPickupScore(&pickupProgram, actorSphere->GetVAO(), actorSphere->GetIndiceCount(), gameCamera, &actorTex);
-	actorHealthPickup = new CActorPickupHealth(&enemyProgram, actorSphere->GetVAO(), actorSphere->GetIndiceCount(), gameCamera, &pickupTex);
+	actorHealthPickup = new CActorPickupHealth(&healthProgram, actorSphere->GetVAO(), actorSphere->GetIndiceCount(), gameCamera, &pickupTex);
+
+	enemyManager = new CActorEnemyManager(gameCamera, gameActor);
 
 	// Labels
 	actorScoreLabel = new CTextLabel("Score: ", "Resources/Fonts/arial.ttf", glm::vec2(10.0f, 520.0f), glm::vec3(1.0f, 0.0f, 0.0f), 0.5f);
 	actorHealthLabel = new CTextLabel("Health: ", "Resources/Fonts/arial.ttf", glm::vec2(10.0f, 560.0f), glm::vec3(1.0f, 0.0f, 0.0f), 0.5f);
+	waveLabel = new CTextLabel("Wave: ", "Resources/Fonts/arial.ttf", glm::vec2(10.0f, 480.0f), glm::vec3(1.0f, 0.0f, 0.0f), 0.5f);
 
 	// Move Objects Start Position
-	actorEnemy->objPosition.x = 20;
 	actorPickup->objPosition.x = -20;
+	actorHealthPickup->objPosition.x = 20;
 }
 
 CPlayScene::~CPlayScene()
@@ -65,14 +67,16 @@ void CPlayScene::Render()
 	// Actors
 	gameActor->Render();
 	gameActor->BulletRender(); // Renders all the bullets in the scene
-	actorEnemy->Render();
 	actorPickup->RenderReflection(gameSkybox);
 	actorHealthPickup->Render();
 	//model->Render(actorEnemy);
 
+	enemyManager->Render();
+
 	// Labels
 	actorHealthLabel->Render();
 	actorScoreLabel->Render();
+	waveLabel->Render();
 
 	glBindVertexArray(0);		// Unbinding VAO
 	glUseProgram(0);
@@ -89,41 +93,12 @@ void CPlayScene::Update(GLfloat* deltaTime, ESceneManager* _currentScene)
 	gameActor->MoveInput(*deltaTime, gameInput);
 	gameActor->ShootInput(*deltaTime, gameInput); // Creates bullet on mouse click
 	gameActor->BulletUpdate(); // Updates all the bullents in scene
-	actorEnemy->Update();
-	actorEnemy->SteeringSeek(*deltaTime, gameActor);
 	actorPickup->Update();
 	actorHealthPickup->Update();
 
-	// gameActor lose health on collision actorEnemy
-	if (CollisionCheck(gameActor, actorEnemy))
-	{
-		gameActor->actorHealth--;
-	}
-	// gameActor gain score on collision actorPickup
-	if (CollisionCheck(gameActor, actorPickup))
-	{
-		gameActor->actorScore += 100;
-	}
-	// gameActor gain health on collision actorHealthPickup
-	if (CollisionCheck(gameActor, actorHealthPickup))
-	{
-		gameActor->actorHealth += 5;
-	}
-	// Destory actorEnemy on collision actorBullet
-	std::map<CActorBullet*, vec2>::iterator bulletIndex = gameActor->bulletsInScene.begin();
-	for (int i = 0; i < gameActor->bulletsInScene.size(); i++)
-	{
-		if (CollisionCheck(bulletIndex->first, actorEnemy))
-		{
-			delete bulletIndex->first;
-			bulletIndex = gameActor->bulletsInScene.erase(bulletIndex);
-			std::cout << "Bullet Hit Enemy" << std::endl;
-		}
-		else
-		{
-			bulletIndex++;
-		}
-	}
+	enemyManager->Update(deltaTime, gameActor);
+
+	AllCollisionsInScene();
 
 	// Updates the score label
 	std::string scoreStr = "Score: ";
@@ -135,6 +110,11 @@ void CPlayScene::Update(GLfloat* deltaTime, ESceneManager* _currentScene)
 	healthStr += std::to_string(gameActor->actorHealth);
 	actorHealthLabel->SetText(healthStr);
 
+	// Updates the wave label
+	std::string waveStr = "Wave: ";
+	waveStr += std::to_string(enemyManager->currentWave);
+	waveLabel->SetText(waveStr);
+
 	// Change Scene To GameOverScene On player Death
 	if (gameActor->actorHealth <= 0)
 	{
@@ -142,8 +122,6 @@ void CPlayScene::Update(GLfloat* deltaTime, ESceneManager* _currentScene)
 		gameSceneScore = gameActor->actorScore;
 		ResetScene(); // Resets the scene for the next play
 	}
-
-	CollisionCheck(gameActor, actorEnemy);
 }
 
 void CPlayScene::TextureGen(const char* textureLocation, GLuint* texture)
@@ -183,4 +161,46 @@ bool CPlayScene::CollisionCheck(CObject* actorOne, CObject* actorTwo)
 		return(true);
 	}
 	return(false);
+}
+
+void CPlayScene::AllCollisionsInScene()
+{
+	// gameActor lose health on collision actorEnemy
+	for (int i = 0; i < enemyManager->enemysInScene.size(); i++)
+	{
+		if (CollisionCheck(gameActor, enemyManager->enemysInScene[i]))
+		{
+			gameActor->actorHealth--;
+		}
+	}
+
+	// gameActor gain score on collision actorPickup
+	if (CollisionCheck(gameActor, actorPickup))
+	{
+		gameActor->actorScore += 100;
+	}
+
+	// gameActor gain health on collision actorHealthPickup
+	if (CollisionCheck(gameActor, actorHealthPickup))
+	{
+		gameActor->actorHealth += 5;
+	}
+
+	// Destory actorEnemy on collision actorBullet
+	//std::map<CActorBullet*, vec2>::iterator bulletIndex = gameActor->bulletsInScene.begin();
+	//for (int i = 0; i < gameActor->bulletsInScene.size(); i++) // Checks every bullet
+	//{
+	//	for (int j = 0; j < enemyManager->enemysInScene.size(); j++) // For every enemy in scene
+	//	{
+	//		if (CollisionCheck(bulletIndex->first, enemyManager->enemysInScene[j]))
+	//		{
+	//			delete bulletIndex->first;
+	//			bulletIndex = gameActor->bulletsInScene.erase(bulletIndex);
+	//		}
+	//		else
+	//		{
+	//			bulletIndex++;
+	//		}
+	//	}
+	//}
 }
