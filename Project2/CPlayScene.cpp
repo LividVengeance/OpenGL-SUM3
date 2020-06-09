@@ -191,24 +191,24 @@ void CPlayScene::AllCollisionsInScene()
 	//Destory actorEnemy on collision actorBullet
 	for (int j = 0; j < enemyManager->enemysInScene.size(); j++) // For every enemy in scene
 	{
-
 		std::map<CActorBullet*, vec2>::iterator bulletsIndex = gameActor->bulletsInScene.begin();	
 		for (int i = 0; i < gameActor->bulletsInScene.size(); i++) // Checks every bullet
 		{
-
 			if (CollisionCheck(bulletsIndex->first, enemyManager->enemysInScene[j]))
 			{
-				std::cout << "Bullet Hit - " << bulletsIndex->second.x << bulletsIndex->second.y << std::endl;
+				// Delete the bullet
 				delete bulletsIndex->first;
 				bulletsIndex = gameActor->bulletsInScene.erase(bulletsIndex);
+
+				// Flag CActorEnemy To Destroy
+				delete enemyManager->enemysInScene[j];
+				enemyManager->enemysInScene.erase(enemyManager->enemysInScene.begin() +j);
+				gameActor->actorScore += 10;
 			}
 			else
 			{
 				bulletsIndex++;
 			}
 		}
-
 	}
-	
-
 }
