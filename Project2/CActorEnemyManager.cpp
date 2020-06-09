@@ -49,13 +49,26 @@ void CActorEnemyManager::AddEnemy(CObject* object)
 	int randZ = rand() % 40;
 	int dist = 10; // Min dist from player that enemy can spawn
 
+	int rand5050X = rand() % 2;
+	int rand5050Z = rand() % 2;
+
 	randX, randZ += dist;
+
+	if (rand5050X == 0)
+	{
+		randX = -randX;
+		dist = -dist;
+	}
+	if(rand5050Z == 0)
+	{
+		randZ = -randZ;
+		dist = -dist;
+	}
+
 	actorEnemy->objPosition.x = object->objPosition.x + randX;
 	actorEnemy->objPosition.z = object->objPosition.z + randZ;
 
 	enemysInScene.push_back(actorEnemy);
-
-	std::cout << enemysInScene.size() << std::endl;
 }
 
 void CActorEnemyManager::WaveCheck(GLfloat* deltaTime, CObject* object)
