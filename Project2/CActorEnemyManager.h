@@ -38,6 +38,7 @@ private:
 
 	// Meshes
 	CSphere* actorSphere;
+	Model* model;
 
 	// Program
 	GLint program;

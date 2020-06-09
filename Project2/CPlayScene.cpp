@@ -1,6 +1,7 @@
 #include "CPlayScene.h"
 
 #include <math.h>
+#include <map>
 
 CPlayScene::CPlayScene(CCamera* _gameCamera, CInput* _gameInput, FMOD::System* _audioSystem)
 {
@@ -69,7 +70,8 @@ void CPlayScene::Render()
 	gameActor->BulletRender(); // Renders all the bullets in the scene
 	actorPickup->RenderReflection(gameSkybox);
 	actorHealthPickup->Render();
-	//model->Render(actorEnemy);
+
+	//model->Render(gameActor);
 
 	enemyManager->Render();
 
@@ -186,21 +188,27 @@ void CPlayScene::AllCollisionsInScene()
 		gameActor->actorHealth += 5;
 	}
 
-	// Destory actorEnemy on collision actorBullet
-	//std::map<CActorBullet*, vec2>::iterator bulletIndex = gameActor->bulletsInScene.begin();
-	//for (int i = 0; i < gameActor->bulletsInScene.size(); i++) // Checks every bullet
-	//{
-	//	for (int j = 0; j < enemyManager->enemysInScene.size(); j++) // For every enemy in scene
-	//	{
-	//		if (CollisionCheck(bulletIndex->first, enemyManager->enemysInScene[j]))
-	//		{
-	//			delete bulletIndex->first;
-	//			bulletIndex = gameActor->bulletsInScene.erase(bulletIndex);
-	//		}
-	//		else
-	//		{
-	//			bulletIndex++;
-	//		}
-	//	}
-	//}
+	//Destory actorEnemy on collision actorBullet
+	for (int j = 0; j < enemyManager->enemysInScene.size(); j++) // For every enemy in scene
+	{
+
+		std::map<CActorBullet*, vec2>::iterator bulletsIndex = gameActor->bulletsInScene.begin();	
+		for (int i = 0; i < gameActor->bulletsInScene.size(); i++) // Checks every bullet
+		{
+
+			if (CollisionCheck(bulletsIndex->first, enemyManager->enemysInScene[j]))
+			{
+				std::cout << "Bullet Hit - " << bulletsIndex->second.x << bulletsIndex->second.y << std::endl;
+				delete bulletsIndex->first;
+				bulletsIndex = gameActor->bulletsInScene.erase(bulletsIndex);
+			}
+			else
+			{
+				bulletsIndex++;
+			}
+		}
+
+	}
+	
+
 }

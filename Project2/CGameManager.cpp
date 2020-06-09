@@ -124,6 +124,7 @@ void CGameManager::Update()
 		gameOverScene->Update(&deltaTime, &currentScene, gamePlayScene->gameSceneScore);
 	}
 
+	gameInput->ProcessInput();
 	glutPostRedisplay();
 }
 

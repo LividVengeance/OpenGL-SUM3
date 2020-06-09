@@ -13,6 +13,7 @@ CActorEnemyManager::CActorEnemyManager(CCamera* _gameCamera, CObject* object)
 	TextureGen(fileLocationPlay, &actorTex);
 
 	actorSphere = new CSphere();
+	model = new Model("Resources/Models/pug/Dog 1.obj", gameCamera);
 
 	AddEnemy(object);
 }
@@ -44,7 +45,6 @@ void CActorEnemyManager::Render()
 
 void CActorEnemyManager::AddEnemy(CObject* object)
 {
-	std::cout << "Craete Bullet" << std::endl;
 	actorEnemy = new CActorEnemy(&program, actorSphere->GetVAO(), actorSphere->GetIndiceCount(), gameCamera, &actorTex);
 	
 	int randX = rand() % 40;

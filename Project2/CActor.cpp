@@ -82,7 +82,7 @@ void CActor::ShootInput(GLfloat deltaTime, CInput* gameInput)
 	float mouseXFit = -(offSetX - mouseX);
 	float mouseZFit = -(offSetZ - mouseZ);
 	
-	if (gameInput->getClick(0))
+	if (gameInput->GetFirstDown(0))
 	{
 		// Gets the mouse pos (when clicked)
 		vec2 mousePos
