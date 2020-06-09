@@ -32,7 +32,6 @@ CPlayScene::CPlayScene(CCamera* _gameCamera, CInput* _gameInput, FMOD::System* _
 
 	// Creates Meshes/Models
 	actorSphere = new CSphere();
-	actorEnemyPyramid = new CPyramid();
 	model = new Model("Resources/Models/Tank/Tank.obj", gameCamera);
 
 	// Create Skybox
@@ -56,6 +55,8 @@ CPlayScene::CPlayScene(CCamera* _gameCamera, CInput* _gameInput, FMOD::System* _
 
 	scorePickupSpawn = true;
 	healthPickupSpawn = true;
+
+	gameActor->objScaleAmount = 0.3f;
 }
 
 CPlayScene::~CPlayScene()
@@ -69,8 +70,10 @@ void CPlayScene::Render()
 	gameSkybox->Render();
 
 	// Actors
-	gameActor->Render();
+	model->Render(gameActor);
 	gameActor->BulletRender(); // Renders all the bullets in the scene
+
+	
 
 	if (scorePickupSpawn)
 	{
@@ -80,8 +83,6 @@ void CPlayScene::Render()
 	{
 		actorHealthPickup->Render();
 	}
-	
-	//model->Render(gameActor);
 
 	enemyManager->Render();
 
@@ -192,6 +193,7 @@ void CPlayScene::AllCollisionsInScene()
 			gameActor->actorHealth--;
 			delete enemyManager->enemysInScene[i]; // Deletes object
 			enemyManager->enemysInScene.erase(enemyManager->enemysInScene.begin() + i); // Deletes from vector
+			i--;
 			gameActor->actorScore += 10;
 		}
 	}
@@ -221,10 +223,16 @@ void CPlayScene::AllCollisionsInScene()
 			if (CollisionCheck(bulletsIndex->first, enemyManager->enemysInScene[j]))
 			{
 				// Delete the bullet
-				delete bulletsIndex->first;
+				if (bulletsIndex->first != nullptr)
+				{
+					delete bulletsIndex->first;
+				}
 				bulletsIndex = gameActor->bulletsInScene.erase(bulletsIndex);
 
-				delete enemyManager->enemysInScene[j]; // Deletes object
+				if (enemyManager->enemysInScene[j] != nullptr)
+				{
+					delete enemyManager->enemysInScene[j]; // Deletes object
+				}
 				enemyManager->enemysInScene.erase(enemyManager->enemysInScene.begin() +j); // Deletes from vector
 				gameActor->actorScore += 10;
 			}

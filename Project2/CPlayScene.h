@@ -45,7 +45,6 @@ private:
 	CActorEnemyManager* enemyManager;
 
 	// Meshes
-	CPyramid* actorEnemyPyramid;
 	CSphere* actorSphere;
 
 	// Labels

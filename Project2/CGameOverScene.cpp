@@ -101,7 +101,7 @@ bool CGameOverScene::Button(float width, float height, CObject* _buttonObj)
 		-(offSetX - mouseX) < _buttonObj->objPosition.x + width / 2 &&
 		offSetY - mouseY > _buttonObj->objPosition.y - height / 2 &&
 		offSetY - mouseY < _buttonObj->objPosition.y + height / 2 &&
-		(gameInput->getClick(0) || gameInput->getClick(1)))
+		(gameInput->GetFirstDown(0) || gameInput->GetFirstDown(1)))
 	{
 		return(true);
 	}

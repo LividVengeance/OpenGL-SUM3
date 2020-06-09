@@ -14,6 +14,8 @@ CObject::CObject(GLint* _program, GLuint* _VAO, int _indiceCount, CCamera* _game
 
 	objScaleAmount = 1.0f;
 	objAngleRotation = 0.0f;
+
+	Update();
 }
 
 CObject::~CObject()

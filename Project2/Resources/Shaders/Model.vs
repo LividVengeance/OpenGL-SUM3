@@ -6,10 +6,12 @@ layout (location = 2) in vec2 texCoords;
 
 out vec2 fragTexCoords;
 
-uniform mat4 MVP;
+uniform mat4 proj;
+uniform mat4 view;
+uniform mat4 model;
 
 void main()
 {
-	gl_Position = MVP * vec4(position, 1.0f);
+	gl_Position = proj * view * model * vec4(position, 1.0f);
 	fragTexCoords = texCoords;
 }

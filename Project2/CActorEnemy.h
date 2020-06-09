@@ -13,6 +13,4 @@ public:
 	vec3 actorVelocity;
 	float maxSpeed = 0.05f;
 	float maxForce = 0.2f;
-
-	bool toBeDestroyed;
 };

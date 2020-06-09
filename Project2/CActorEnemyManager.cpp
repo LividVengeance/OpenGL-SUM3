@@ -9,9 +9,6 @@ CActorEnemyManager::CActorEnemyManager(CCamera* _gameCamera, CObject* object)
 	program = CShaderLoader::CreateProgram("Resources/Shaders/Basic-Normal.vs",
 		"Resources/Shaders/Blinn-Phong.fs");
 
-	const char* fileLocationPlay = "Resources/Textures/BackgroundSprite.png";
-	TextureGen(fileLocationPlay, &actorTex);
-
 	actorSphere = new CSphere();
 	model = new Model("Resources/Models/pug/Dog 1.obj", gameCamera);
 
@@ -24,12 +21,13 @@ CActorEnemyManager::~CActorEnemyManager()
 
 void CActorEnemyManager::Update(GLfloat* deltaTime, CObject* object)
 {
-	//std::cout << enemysInScene.size() << std::endl;
-
 	for (int i = 0; i < enemysInScene.size(); i++)
 	{
-		enemysInScene[i]->Update();
-		enemysInScene[i]->SteeringSeek(*deltaTime, object);
+		if (enemysInScene[i] != nullptr)
+		{
+			enemysInScene[i]->Update();
+			enemysInScene[i]->SteeringSeek(*deltaTime, object);
+		}
 	}
 
 	WaveCheck(deltaTime, object);
@@ -39,7 +37,12 @@ void CActorEnemyManager::Render()
 {
 	for (int i = 0; i < enemysInScene.size(); i++)
 	{
-		enemysInScene[i]->Render();
+		//enemysInScene[i]->Render();
+
+		if (enemysInScene[i] != nullptr)
+		{
+			model->Render(enemysInScene[i]);
+		}
 	}
 }
 

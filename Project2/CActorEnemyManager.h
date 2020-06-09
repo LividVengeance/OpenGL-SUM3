@@ -30,7 +30,7 @@ private:
 	int actorsPerWave = 10;
 	int timeScalePerWave = 10;
 
-	// Texture
+	// Textures
 	GLuint actorTex;
 
 	// Actor
