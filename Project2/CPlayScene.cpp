@@ -199,19 +199,19 @@ void CPlayScene::AllCollisionsInScene()
 	}
 
 	// gameActor gain score on collision actorPickup
-	if (CollisionCheck(gameActor, actorPickup))
+	if (CollisionCheck(gameActor, actorPickup) && scorePickupSpawn)
 	{
 		gameActor->actorScore += 100;
 		scorePickupSpawn = false;
-		delete actorPickup;
+		//delete actorPickup;
 	}
 
 	// gameActor gain health on collision actorHealthPickup
-	if (CollisionCheck(gameActor, actorHealthPickup))
+	if (CollisionCheck(gameActor, actorHealthPickup) && healthPickupSpawn)
 	{
 		gameActor->actorHealth += 5;
 		healthPickupSpawn = false;
-		delete actorHealthPickup;
+		//delete actorHealthPickup;
 	}
 
 	//Destory actorEnemy on collision actorBullet
