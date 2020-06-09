@@ -38,14 +38,14 @@ CPlayScene::CPlayScene(CCamera* _gameCamera, CInput* _gameInput, FMOD::System* _
 	gameSkybox = new CSkybox(&skyboxProgram, gameCamera);
 	
 	// Create Actors
-	actorEnemy = new CActorEnemy(&enemyProgram, actorSphere->GetVAO(), actorSphere->GetIndiceCount(), gameCamera, &actorTex);
 	gameActor = new CActor(&program, actorSphere->GetVAO(), actorSphere->GetIndiceCount(), gameCamera, &actorTex, audioSystem);
+	actorEnemy = new CActorEnemy(&enemyProgram, actorSphere->GetVAO(), actorSphere->GetIndiceCount(), gameCamera, &actorTex);
 	actorPickup = new CActorPickupScore(&pickupProgram, actorSphere->GetVAO(), actorSphere->GetIndiceCount(), gameCamera, &actorTex);
 	actorHealthPickup = new CActorPickupHealth(&enemyProgram, actorSphere->GetVAO(), actorSphere->GetIndiceCount(), gameCamera, &pickupTex);
 
 	// Labels
-	actorHealthLabel = new CTextLabel("Health: ", "Resources/Fonts/arial.ttf", glm::vec2(10.0f, 560.0f), glm::vec3(1.0f, 0.0f, 0.0f), 0.5f);
 	actorScoreLabel = new CTextLabel("Score: ", "Resources/Fonts/arial.ttf", glm::vec2(10.0f, 520.0f), glm::vec3(1.0f, 0.0f, 0.0f), 0.5f);
+	actorHealthLabel = new CTextLabel("Health: ", "Resources/Fonts/arial.ttf", glm::vec2(10.0f, 560.0f), glm::vec3(1.0f, 0.0f, 0.0f), 0.5f);
 
 	// Move Objects Start Position
 	actorEnemy->objPosition.x = 20;
@@ -183,10 +183,4 @@ bool CPlayScene::CollisionCheck(CObject* actorOne, CObject* actorTwo)
 		return(true);
 	}
 	return(false);
-}
-
-int CPlayScene::GetPlayerScore()
-{
-	// Getting player score for gameover scene
-	return(gameActor->actorScore);
 }

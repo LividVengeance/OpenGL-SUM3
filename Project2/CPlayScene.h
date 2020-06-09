@@ -24,13 +24,12 @@ public:
 	void Render();
 	void Update(GLfloat* deltaTime, ESceneManager* _currentScene);
 
+	int gameSceneScore;
+
+private:
 	void TextureGen(const char* textureLocation, GLuint* texture);
 	bool CollisionCheck(CObject* actorOne, CObject* actorTwo);
 	void ResetScene();
-	int GetPlayerScore();
-
-
-	ESceneManager* currentScene;
 
 	// Textures
 	GLuint actorTex;
@@ -60,12 +59,11 @@ public:
 	FMOD::System* audioSystem;
 
 	// Utilities
+	ESceneManager* currentScene;
 	CSkybox* gameSkybox;
 	CCamera* gameCamera;
 	CInput* gameInput;
 	Model* model;
 	mat4 view;
-
-	int gameSceneScore;
 };
 
