@@ -53,6 +53,9 @@ CPlayScene::CPlayScene(CCamera* _gameCamera, CInput* _gameInput, FMOD::System* _
 	// Move Objects Start Position
 	actorPickup->objPosition.x = -20;
 	actorHealthPickup->objPosition.x = 20;
+
+	scorePickupSpawn = true;
+	healthPickupSpawn = true;
 }
 
 CPlayScene::~CPlayScene()
@@ -68,9 +71,16 @@ void CPlayScene::Render()
 	// Actors
 	gameActor->Render();
 	gameActor->BulletRender(); // Renders all the bullets in the scene
-	actorPickup->RenderReflection(gameSkybox);
-	actorHealthPickup->Render();
 
+	if (scorePickupSpawn)
+	{
+		actorPickup->RenderReflection(gameSkybox);
+	}
+	if (healthPickupSpawn)
+	{
+		actorHealthPickup->Render();
+	}
+	
 	//model->Render(gameActor);
 
 	enemyManager->Render();
@@ -95,9 +105,16 @@ void CPlayScene::Update(GLfloat* deltaTime, ESceneManager* _currentScene)
 	gameActor->MoveInput(*deltaTime, gameInput);
 	gameActor->ShootInput(*deltaTime, gameInput); // Creates bullet on mouse click
 	gameActor->BulletUpdate(); // Updates all the bullents in scene
-	actorPickup->Update();
-	actorHealthPickup->Update();
 
+	if (scorePickupSpawn)
+	{
+		actorPickup->Update();
+	}
+	if (healthPickupSpawn)
+	{
+		actorHealthPickup->Update();
+	}
+	
 	enemyManager->Update(deltaTime, gameActor);
 
 	AllCollisionsInScene();
@@ -173,8 +190,8 @@ void CPlayScene::AllCollisionsInScene()
 		if (CollisionCheck(gameActor, enemyManager->enemysInScene[i]))
 		{
 			gameActor->actorHealth--;
-			delete enemyManager->enemysInScene[i];
-			enemyManager->enemysInScene.erase(enemyManager->enemysInScene.begin() + i);
+			delete enemyManager->enemysInScene[i]; // Deletes object
+			enemyManager->enemysInScene.erase(enemyManager->enemysInScene.begin() + i); // Deletes from vector
 			gameActor->actorScore += 10;
 		}
 	}
@@ -183,12 +200,16 @@ void CPlayScene::AllCollisionsInScene()
 	if (CollisionCheck(gameActor, actorPickup))
 	{
 		gameActor->actorScore += 100;
+		scorePickupSpawn = false;
+		delete actorPickup;
 	}
 
 	// gameActor gain health on collision actorHealthPickup
 	if (CollisionCheck(gameActor, actorHealthPickup))
 	{
 		gameActor->actorHealth += 5;
+		healthPickupSpawn = false;
+		delete actorHealthPickup;
 	}
 
 	//Destory actorEnemy on collision actorBullet
@@ -203,9 +224,8 @@ void CPlayScene::AllCollisionsInScene()
 				delete bulletsIndex->first;
 				bulletsIndex = gameActor->bulletsInScene.erase(bulletsIndex);
 
-				// Flag CActorEnemy To Destroy
-				delete enemyManager->enemysInScene[j];
-				enemyManager->enemysInScene.erase(enemyManager->enemysInScene.begin() +j);
+				delete enemyManager->enemysInScene[j]; // Deletes object
+				enemyManager->enemysInScene.erase(enemyManager->enemysInScene.begin() +j); // Deletes from vector
 				gameActor->actorScore += 10;
 			}
 			else

@@ -69,5 +69,8 @@ private:
 	CInput* gameInput;
 	Model* model;
 	mat4 view;
+
+	bool scorePickupSpawn;
+	bool healthPickupSpawn;
 };
 
